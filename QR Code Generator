@@ -1,0 +1,69 @@
+import 'package:flutter/material.dart';
+import 'package:qr_flutter/qr_flutter.dart';
+
+void main() {
+  runApp(QRGeneratorApp());
+}
+
+class QRGeneratorApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'QR Code Generator',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: QRGeneratorHomePage(),
+    );
+  }
+}
+
+class QRGeneratorHomePage extends StatefulWidget {
+  @override
+  _QRGeneratorHomePageState createState() => _QRGeneratorHomePageState();
+}
+
+class _QRGeneratorHomePageState extends State<QRGeneratorHomePage> {
+  final TextEditingController _controller = TextEditingController();
+  String _qrData = '';
+
+  void _generateQR() {
+    setState(() {
+      _qrData = _controller.text;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('QR Code Generator'),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            TextField(
+              controller: _controller,
+              decoration: InputDecoration(
+                labelText: 'Enter data to generate QR code',
+              ),
+            ),
+            SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: _generateQR,
+              child: Text('Generate QR Code'),
+            ),
+            SizedBox(height: 20),
+            if (_qrData.isNotEmpty)
+              QrImage(
+                data: _qrData,
+                version: QrVersions.auto,
+                size: 200.0,
+              ),
+          ],
+        ),
+      ),
+    );
+  }
+}
